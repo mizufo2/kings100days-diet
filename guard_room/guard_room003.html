@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我が王よ、その腹の肉を討ち払え！皮下脂肪と内臓脂肪を完膚なきまでに撃滅する熱血作戦書</title>
+    <style>
+        /* 羊皮紙風モーダル内コンテンツ・スタイル */
+        .modal-column-container {
+            background-color: #fdf6e2;
+            color: #2c221e;
+            font-family: 'M 1+1c Rounded', 'Rounded Mplus 1c', sans-serif;
+            border: 4px solid #8b6508;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            max-width: 600px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* コラムヘッダー */
+        .modal-column-container h1 {
+            color: #722f37;
+            font-size: 1.2rem;
+            line-height: 1.4;
+            margin-top: 0;
+            margin-bottom: 14px;
+            text-align: center;
+            border-bottom: 2px dashed #8b6508;
+            padding-bottom: 10px;
+        }
+
+        /* 親衛隊長の情熱メッセージエリア */
+        .guard-captain-header {
+            background: #fffdf5;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .guard-portrait {
+            width: 80px;
+            height: auto;
+            flex-shrink: 0;
+            border-radius: 6px;
+            border: 1px solid #8b6508;
+            background-color: #e8dfc5;
+        }
+
+        .guard-lead-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: #2c221e;
+        }
+
+        /* 章セクション */
+        .column-section {
+            background: #fff;
+            border: 2px solid #8b6508;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .column-section h2 {
+            color: #722f37;
+            font-size: 1.05rem;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0d0b0;
+            padding-bottom: 6px;
+        }
+
+        .column-section p, .column-section li {
+            font-size: 0.88rem;
+            line-height: 1.65;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .column-section ul, .column-section ol {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* 作戦カード */
+        .strategy-card {
+            background: #fcf8ec;
+            border: 1px dashed #d4af37;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .strategy-card h3 {
+            margin: 0 0 6px 0;
+            font-size: 0.95rem;
+            color: #722f37;
+            display: flex;
+            align-items: center;
+        }
+
+        /* ハイライト装飾 */
+        .highlight-badge {
+            background: #8b6508;
+            color: #fff;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 6px;
+            display: inline-block;
+        }
+
+        /* 脂肪比較テーブル */
+        .fat-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 0.82rem;
+        }
+
+        .fat-table th, .fat-table td {
+            border: 1px solid #d4af37;
+            padding: 8px;
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .fat-table th {
+            background-color: #fcf8ec;
+            color: #722f37;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="modal-column-container">
+    <!-- タイトル -->
+    <h1>我が王よ、その腹の肉を討ち払え！皮下脂肪と内臓脂肪を完膚なきまでに撃滅する熱血作戦書</h1>
+
+    <!-- 親衛隊長 ランダム画像 ＆ 冒頭メッセージ -->
+    <div class="guard-captain-header">
+        <img id="guardCaptainImg" src="" alt="熱血スパルタ親衛隊長" class="guard-portrait">
+        <div class="guard-lead-text">
+            「ぬうっ…我が王よ！恐れながら申し上げます！最近、王の御腹周りに不穏な“肉の城壁”が築かれつつあるのでは!? ズボンのベルトが悲鳴を上げておりますぞ！」<br><br>
+            お腹の脂肪というヤツは、一度占領を許すとなかなか退去せぬ厄介な敵！しかしご安心召されよ！脂肪のタイプに合わせた<b>正しい戦術（アプローチ）</b>を仕掛ければ、あっという間に退散させることができます！本日はこの親衛隊長が、王のお腹の脂肪の正体と、それを完膚なきまでに討ち払う「食事」と「運動」の極秘作戦を解説いたしますぞ！
+        </div>
+    </div>
+
+    <!-- 1. まず討伐対象を知れ！「２つの敵（脂肪）」の正体 -->
+    <div class="column-section">
+        <h2>⚔️ 1. まず討伐対象を知れ！「2つの敵（脂肪）」の正体</h2>
+        <p>王のお腹に立ちはだかる脂肪には、二つの勢力が存在します！</p>
+        
+        <table class="fat-table">
+            <thead>
+                <tr>
+                    <th>敵のタイプ</th>
+                    <th>特徴と正体</th>
+                    <th>出没しやすい者</th>
+                    <th>難易度（落としやすさ）</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>内臓脂肪</b></td>
+                    <td>内臓の周りにへばりつく敵。「リンゴ型肥満」とも呼ばれる！</td>
+                    <td>男子たる者、および閉経後の女性！</td>
+                    <td><b>電撃戦で落としやすい！</b></td>
+                </tr>
+                <tr>
+                    <td><b>皮下脂肪</b></td>
+                    <td>皮膚のすぐ下でつまめる城壁！「洋ナシ型肥満」の元凶！</td>
+                    <td>女性に多く立ちはだかる！</td>
+                    <td><b>じっくり持久戦で落とす！</b></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="margin-bottom: 0; margin-top: 10px;">さあ我が王よ、ご自身のお腹のお肉をつまんでみてください！「つまめる肉（皮下脂肪）」か、「つまめぬがパンパンに張っている（内臓脂肪）」か！敵の正体を見極めるのです！</p>
+    </div>
+
+    <!-- 2. 「腹筋運動だけ」では敵は滅びぬ！ -->
+    <div class="column-section">
+        <h2>🛡️ 2. 「腹筋運動だけ」では敵は滅びぬ！</h2>
+        <p>「お腹を凹ませたいから、毎日腹筋100回だ！」……ぬははは！我が王よ、それは大きな罠でございます！</p>
+        <p>もちろん腹筋を鍛えるのは姿勢を正し、腹を締める素晴らしい鍛錬！しかし、<b>腹筋運動だけをしたところで、その場所の脂肪が直接燃えて消えるわけではない</b>のです！</p>
+        <p style="margin-bottom: 0;">体脂肪というヤツは、全身から均等に撤退していく性質を持っています！つまり、お腹の脂肪を討ち払うには、<b>全身の消費カロリーを増やし、摂取カロリーとの攻防戦に勝つこと</b>こそが絶対条件でございます！</p>
+    </div>
+
+    <!-- 3. 王の御膳を見直す！食生活の３大陣形 -->
+    <div class="column-section">
+        <h2>🍚 3. 王の御膳を見直す！食生活の3大陣形</h2>
+        <p>脂肪討伐において、運動以上に戦局を左右するのが「食事の陣形」でございます！</p>
+
+        <div class="strategy-card">
+            <h3><span class="highlight-badge">陣形一</span>敵の補給路を断て！精製された糖質と脂質を抑える</h3>
+            <p style="margin-bottom: 0;">白米、パン、甘いジュースに揚げ物！これらは王の体内で血糖値を急上昇させ、余分なエネルギーを脂肪という名の「敵の増援」に変えてしまいます！主食は玄米やもち麦、全粒粉パンなど、食物繊維という名の盾を持つ食材へ置き換えるのです！</p>
+        </div>
+
+        <div class="strategy-card">
+            <h3><span class="highlight-badge">陣形二</span>筋肉という名の精鋭部隊を育てる！タンパク質を確保せよ</h3>
+            <p style="margin-bottom: 0;">基礎代謝という城の防衛力を高く保つため、毎食タンパク質（肉、魚、卵、大豆製品）をガッツリ補給してください！筋肉という精鋭部隊を減らしてはなりませぬ！</p>
+        </div>
+
+        <div class="strategy-card" style="margin-bottom: 0;">
+            <h3><span class="highlight-badge">陣形三</span>腸内環境を整え、お腹の滞留物を一掃せよ！</h3>
+            <p style="margin-bottom: 0;">腸内という名の補給路が滞ると、便秘を引き起こし、ぽっこりお腹の元凶となります！野菜やきのこ、海藻類の食物繊維と、たっぷりの水分補給で、腸内を常にクリーンに保つのです！</p>
+        </div>
+    </div>
+
+    <!-- 4. 脂肪を焼き尽くす！親衛隊直伝の特訓メニュー -->
+    <div class="column-section">
+        <h2>🔥 4. 脂肪を焼き尽くす！親衛隊直伝の特訓メニュー</h2>
+        <p>食事の陣形を整えたら、いよいよ脂肪燃焼の突撃でございます！</p>
+        <ul>
+            <li><b>有酸素運動（ウォーキング、ジョギングなど）：</b> 内臓脂肪を焼き尽くす最強の攻撃！「ちょっとキツいかな？」と感じるペースで、週3回・1回20〜30分を目安に街道を駆け抜けるのです！</li>
+            <li><b>大筋肉群の鍛錬（スクワットなど）：</b> お腹ばかりを気にしてはいけませぬ！太ももや背中といった「王国最大の筋肉」をスクワットなどで鍛え上げれば、基礎代謝が爆発的に上がり、勝手に脂肪が燃える体に仕上がります！</li>
+            <li><b>ドローイン（インナーマッスルの覚醒）：</b> 息を吐ききり、お腹を極限まで凹ませた状態をキープする「ドローイン」！これは腹横筋という“天然の鎧（コルセット）”を鍛え、ぽっこりお腹を内側から締め上げる必殺技でございます！</li>
+        </ul>
+    </div>
+
+    <!-- まとめ -->
+    <div class="column-section" style="background: #fffdf5; border: 2px solid #d4af37; margin-bottom: 0;">
+        <h2>👑 まとめ</h2>
+        <p>我が王よ！お腹の脂肪討伐の極意は、一朝一夕の過酷な断食にあらず！<b>「美味しく正しい食事」と「熱き鍛錬」の継続</b>にこそ勝利があります！</p>
+        <p>まずは「甘いジュースを隊士たちが飲む水や茶に変える」「週2回、城の周りを30分歩いてみる」といった一歩から始められよ！</p>
+        <p style="margin-bottom: 0;">さあ、共に理想の肉体を取り戻す旅へ出発でございます！</p>
+    </div>
+</div>
+
+<script>
+    // 親衛隊長画像（royal_guards02.png 〜 royal_guards08.png）をランダムで差し込む処理
+    (function setRandomGuardImage() {
+        const min = 2;
+        const max = 8;
+        const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+        const imageNumber = String(randomNum).padStart(2, '0');
+        const guardImgElement = document.getElementById('guardCaptainImg');
+        if (guardImgElement) {
+            guardImgElement.src = `img/royal_guards${imageNumber}.png`;
+        }
+    })();
+</script>
+
+</body>
+</html>

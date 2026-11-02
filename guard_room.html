@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>守衛室 - 王様の100日ダイエット</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <style>
+        /* 羊皮紙風の世界観・デザイン（index.html, minister_office.htmlと統一） */
+        body {
+            background-color: #f4ebd0;
+            color: #2c221e;
+            font-family: 'M 1+1c Rounded', 'Rounded Mplus 1c', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 10px;
+            box-sizing: border-box;
+        }
+        .guard-room {
+            background: #fdf6e2;
+            border: 6px solid #8b6508;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        h1 {
+            color: #722f37;
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 16px;
+            text-align: center;
+            border-bottom: 2px dashed #8b6508;
+            padding-bottom: 8px;
+        }
+        
+        /* 親衛隊長の挨拶メッセージエリア */
+        .guard-greeting {
+            background: #fffdf5;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+        }
+        .guard-portrait {
+            width: 75px;
+            height: auto;
+            flex-shrink: 0;
+        }
+        .greeting-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: #2c221e;
+        }
+
+        /* セクション枠 */
+        .edict-section {
+            background: #fff;
+            border: 2px solid #8b6508;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 18px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        .edict-title {
+            color: #722f37;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid #e0d0b0;
+            padding-bottom: 6px;
+        }
+
+        /* 検索ボックス */
+        .search-box {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #8b6508;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+            background-color: #fffdf5;
+            font-family: inherit;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: #722f37;
+            box-shadow: 0 0 5px rgba(114, 47, 55, 0.3);
+        }
+
+        /* 戦術書（コラム）リスト */
+        .tactics-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .tactics-item {
+            background: #fffdf5;
+            border: 1px solid #d4af37;
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #1a2b4c;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tactics-item:hover {
+            background-color: #fceecb;
+            transform: translateY(-1px);
+        }
+        .tactics-item::before {
+            content: "⚔️";
+            font-size: 1rem;
+        }
+
+        /* 王国ナビゲーションバー */
+        .kingdom-nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 12px;
+        }
+        .nav-btn {
+            flex: 1;
+            background: #e8dfc5;
+            color: #5a4a35;
+            border: 2px solid #8b6508;
+            border-radius: 8px 8px 0 0;
+            padding: 8px 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+        .nav-btn:hover {
+            background: #d4af37;
+            color: #fff;
+        }
+        .nav-btn.active {
+            background: #8b6508;
+            color: #fdf6e2;
+            border-bottom: 2px solid #8b6508;
+        }
+
+        /* 羊皮紙風モーダルスタイル */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #fdf6e2;
+            border: 6px solid #8b6508;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .modal-close {
+            position: sticky;
+            top: 0;
+            float: right;
+            background: #722f37;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .modal-body {
+            clear: both;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+        .no-result {
+            font-size: 0.85rem;
+            color: #888;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 王国ナビゲーションバー -->
+<nav class="kingdom-nav">
+    <a href="index.html" class="nav-btn">👑 玉座の間</a>
+    <a href="minister_office.html" class="nav-btn">🏛️ 大臣執務室</a>
+    <a href="guard_room.html" class="nav-btn active">🛡️ 守衛室</a>
+    <a href="suggestion_box.html" class="nav-btn">📖 王国日誌</a>
+</nav>
+
+<div class="guard-room">
+    <h1>🛡️ 親衛隊守衛室</h1>
+
+    <!-- 親衛隊長の挨拶 -->
+    <div class="guard-greeting">
+        <img src="img/royal_guards01.png" alt="親衛隊長" class="guard-portrait">
+        <div class="greeting-text">
+            我が王！守衛室へよくぞ来られた！<br>
+            ここは我が親衛隊が誇る熱血戦術書（コラム）の保管庫にございます！忍び寄る脂肪から王をお守りする盾となることこそ、我が守衛室の真なる役割であります！ 甘えを捨て、脂肪という名の敵軍を共に撃滅いたしましょうぞ！
+        </div>
+    </div>
+
+    <!-- ① 本日の厳選檄文（ランダム表示枠） -->
+    <div class="edict-section">
+        <div class="edict-title">🔥 本日の厳選檄文（親衛隊長の推し戦術）</div>
+        <ul id="random-tactics" class="tactics-list">
+            <!-- JavaScriptでランダムに3件生成 -->
+        </ul>
+    </div>
+
+    <!-- ② 全戦術書アーカイブ ＆ 検索機能 -->
+    <div class="edict-section">
+        <div class="edict-title">📚 全戦術書アーカイブ</div>
+        <input type="text" id="search-input" class="search-box" placeholder="キーワードで戦術書を検索（例: 筋トレ, 停滞期）...">
+        <ul id="all-tactics" class="tactics-list">
+            <!-- JavaScriptで全件＆検索結果を動的表示 -->
+        </ul>
+    </div>
+</div>
+
+<!-- ③ 羊皮紙風モーダルウインドウ -->
+<div id="tactics-modal" class="modal-overlay">
+    <div class="modal-content">
+        <button id="modal-close-btn" class="modal-close">✕ 閉じる</button>
+        <div id="modal-body" class="modal-body">
+            <!-- fetch()取得したHTML本文がここに挿入されます -->
+        </div>
+    </div>
+</div>
+
+<script>
+    let allTacticsData = [];
+
+    // 要素の取得
+    const randomContainer = document.getElementById('random-tactics');
+    const allContainer = document.getElementById('all-tactics');
+    const searchInput = document.getElementById('search-input');
+    const modal = document.getElementById('tactics-modal');
+    const modalBody = document.getElementById('modal-body');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    // 初期化：JSONデータの読み込み
+    async function initGuardRoom() {
+        try {
+            const response = await fetch('guard_room/guard_room.json');
+            if (!response.ok) throw new Error('メタデータの取得に失敗しました');
+            allTacticsData = await response.json();
+            
+            displayRandomTactics();
+            renderAllTactics(allTacticsData, ''); // キーワード空で呼び出し
+        } catch (error) {
+            console.error(error);
+            allContainer.innerHTML = '<li class="no-result">戦術書の読み込みに失敗いたしました。</li>';
+        }
+    }
+
+    // ① 本日の厳選檄文（ランダム3件抽出）
+    function displayRandomTactics() {
+        if (allTacticsData.length === 0) return;
+        
+        // 配列をシャッフルして最大3件を取得
+        const shuffled = [...allTacticsData].sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 3);
+
+        randomContainer.innerHTML = '';
+        selected.forEach(item => {
+            const li = createTacticsElement(item);
+            randomContainer.appendChild(li);
+        });
+    }
+
+    // ② 全戦術書一覧の描画（検索時のみリスト表示して軽量化）
+function renderAllTactics(data, keyword = '') {
+    allContainer.innerHTML = '';
+
+    // キーワードが空のときは全件描画せず案内のみ表示
+    if (!keyword) {
+        allContainer.innerHTML = '<li class="no-result" style="color: #8b6508; font-weight: bold;">↑ 上の検索窓にキーワードを入力すると戦術書が絞り込まれます。</li>';
+        return;
+    }
+
+    if (data.length === 0) {
+        allContainer.innerHTML = '<li class="no-result">該当する戦術書が見つかりません。</li>';
+        return;
+    }
+
+    data.forEach(item => {
+        const li = createTacticsElement(item);
+        allContainer.appendChild(li);
+    });
+}
+
+    // リストアイテム（DOM）生成共通処理
+    function createTacticsElement(item) {
+        const li = document.createElement('li');
+        li.className = 'tactics-item';
+        li.textContent = item.title;
+        li.addEventListener('click', () => openModal(item.path));
+        return li;
+    }
+
+    // 検索機能のリアルタイムフィルタリング
+    searchInput.addEventListener('input', (e) => {
+    const keyword = e.target.value.toLowerCase().trim();
+
+    // 入力欄が空に戻った場合は案内表示へ切り替え
+    if (!keyword) {
+        renderAllTactics([], '');
+        return;
+    }
+
+    const filtered = allTacticsData.filter(item => 
+        item.title.toLowerCase().includes(keyword)
+    );
+    renderAllTactics(filtered, keyword);
+});
+
+    // ③ fetch()による非同期モーダル表示
+    async function openModal(filePath) {
+        modalBody.innerHTML = '<p style="text-align:center;">戦術書を開いております...</p>';
+        modal.classList.add('active');
+
+        try {
+            const response = await fetch(filePath);
+            if (!response.ok) throw new Error('戦術書が見つかりませんでした');
+            const htmlText = await response.text();
+            
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlText, 'text/html');
+            
+            // bodyの中身、または全体を取得
+            const bodyContent = doc.body ? doc.body.innerHTML : htmlText;
+            modalBody.innerHTML = bodyContent;
+
+            // 【重要】innerHTMLで注入されたscriptタグを再実行させる処理
+            const scripts = modalBody.querySelectorAll('script');
+            scripts.forEach(oldScript => {
+                const newScript = document.createElement('script');
+                Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
+
+            // 【補足】もし画像が相対パス指定で崩れる場合は自動補正
+            const imgs = modalBody.querySelectorAll('img');
+            imgs.forEach(img => {
+                const src = img.getAttribute('src');
+                if (src && !src.startsWith('http') && !src.startsWith('/') && !src.startsWith('guard_room/')) {
+                    // ルートに画像があるか、guard_room内にあるかに応じてパスを調整
+                    // 例: img.src = src; 
+                }
+            });
+
+        } catch (error) {
+            console.error(error);
+            modalBody.innerHTML = '<p style="color:red; text-align:center;">戦術書の読み込みに失敗しました。</p>';
+        }
+    }
+
+    // モーダルを閉じる処理
+    modalCloseBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+    }
+
+    // ページ読み込み時に実行
+    document.addEventListener('DOMContentLoaded', initGuardRoom);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大臣執務室 - 王様の100日ダイエット</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <style>
+        /* 羊皮紙風の世界観・デザイン（index.htmlと統一） */
+        body {
+            background-color: #f4ebd0;
+            color: #2c221e;
+            font-family: 'M 1+1c Rounded', 'Rounded Mplus 1c', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 10px;
+            box-sizing: border-box;
+        }
+        .office-room {
+            background: #fdf6e2;
+            border: 6px solid #8b6508;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        h1 {
+            color: #722f37;
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 16px;
+            text-align: center;
+            border-bottom: 2px dashed #8b6508;
+            padding-bottom: 8px;
+        }
+        
+        /* 大臣の挨拶メッセージエリア */
+        .minister-greeting {
+            background: #fffdf5;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+        }
+        .minister-portrait {
+            width: 75px;
+            height: auto;
+            flex-shrink: 0;
+        }
+        .greeting-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: #2c221e;
+        }
+
+        /* セクション枠（公文書風） */
+        .edict-section {
+            background: #fff;
+            border: 2px solid #8b6508;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 18px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        .edict-title {
+            color: #722f37;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid #e0d0b0;
+            padding-bottom: 6px;
+        }
+
+        /* 安心のお約束バッジ */
+        .privacy-badge {
+            background: #eef7ed;
+            border: 1px solid #27ae60;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            color: #1e6b37;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            font-weight: bold;
+        }
+
+        p, li {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        ul, ol {
+            padding-left: 20px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        /* データバックアップ手順解説ボックス */
+        .backup-guide {
+            background: #fcf8ec;
+            border: 1px dashed #d4af37;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 8px;
+        }
+        .step-tag {
+            background: #8b6508;
+            color: #fff;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        /* 攻略ガイド・コラムカード */
+        .guide-card {
+            background: #fffdf5;
+            border: 1px solid #d4af37;
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+        }
+        .guide-card h3 {
+            margin: 0 0 4px 0;
+            font-size: 0.95rem;
+            color: #1a2b4c;
+        }
+
+        /* 王国ナビゲーションバー */
+        .kingdom-nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 12px;
+        }
+        .nav-btn {
+            flex: 1;
+            background: #e8dfc5;
+            color: #5a4a35;
+            border: 2px solid #8b6508;
+            border-radius: 8px 8px 0 0;
+            padding: 8px 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+        .nav-btn:hover {
+            background: #d4af37;
+            color: #fff;
+        }
+        .nav-btn.active {
+            background: #8b6508;
+            color: #fdf6e2;
+            border-bottom: 2px solid #8b6508;
+        }
+    </style>
+</head>
+<body>
+<!-- 王国ナビゲーションバー -->
+<nav class="kingdom-nav">
+    <a href="index.html" class="nav-btn">👑 玉座の間</a>
+    <a href="minister_office.html" class="nav-btn active">🏛️ 大臣執務室</a>
+    <a href="guard_room.html" class="nav-btn">🛡️ 守衛室</a>
+    <a href="suggestion_box.html" class="nav-btn">📖 王国日誌</a>
+</nav>
+
+<div class="office-room">
+    <h1>🏛️ 大臣執務室</h1>
+
+    <!-- 大臣の挨拶 -->
+    <div class="minister-greeting">
+        <img src="img/minister02.png" alt="大臣" class="minister-portrait">
+        <div class="greeting-text">
+            我が王、大臣執務室へようこそお越しくださり申した。<br>
+            ここでは当王国の掟（ご利用上の注意点やプライバシーポリシー）と、壮健なる肉体を取り戻すための知識を記しておりますぞ。
+        </div>
+    </div>
+
+    <!-- 王国の掟（プライバシー・データ管理仕様） -->
+    <div class="edict-section">
+        <div class="edict-title">📜 第一の掟：データの安全性とプライバシー</div>
+        
+        <div class="privacy-badge">
+            🔒 外部送信なし：我が王の貴重な身体記録（体重データ）は外部のサーバーへ送信されることは一切ございません。
+        </div>
+        
+        <p>当アプリ（アプリ名：王様の100日ダイエット）はお使いの端末（スマートフォンやパソコンのブラウザ内）にのみデータを記録（<code>localStorage</code>を使用）しております。</p>
+        <p>王国の秘匿事項が第三者に漏洩することはございませんので、どうぞご安心の上、日々の公務（計測）にお励みくださいませ。</p>
+    </div>
+
+    <!-- データ継承・引継ぎの手引き -->
+    <div class="edict-section">
+        <div class="edict-title">📦 第二の掟：記録の保存と引き継ぎ（バックアップ）</div>
+        <p>ブラウザのキャッシュクリアや端末の変更を行うと、王国の記録が失われる危険がございます。定期的に「王国の書庫」にて記録をお手元に保存くだされ。</p>
+
+        <div class="backup-guide">
+            <p style="margin-top:0; font-weight:bold; color:#722f37;">【記録の書き出し（バックアップ）】</p>
+            <p><span class="step-tag">手順 1</span>メイン画面下の「📜 王国の書庫」にある<b>「📤 記録を書き出す」</b>を押します。</p>
+            <p><span class="step-tag">手順 2</span>JSON形式のバックアップファイルが端末に保存されます。大切に保管してください。</p>
+            
+            <p style="font-weight:bold; color:#722f37; margin-top:10px;">【記録の読み込み（復元・引継ぎ）】</p>
+            <p><span class="step-tag">手順 1</span>新しい端末やブラウザでメイン画面を開きます。</p>
+            <p><span class="step-tag">手順 2</span>「📜 王国の書庫」の<b>「📥 記録を読み込む」</b>を押して、保存しておいたJSONファイルを選択します。</p>
+        </div>
+    </div>
+
+    <!-- 100日ダイエット攻略ガイド（ノウハウ集） -->
+    <div class="edict-section">
+        <div class="edict-title">📚 100日ダイエット攻略の指南書</div>
+        <p>大臣が医学的知識に基づき編纂した、減量を成功に導く指南書でございます。</p>
+
+        <div class="guide-card">
+            <h3>📖 1. 王のPFCバランス（栄養の三大柱）</h3>
+            <p>極端な絶食は王国の国力を損ないます。タンパク質（P）を中心に、脂質（F）と炭水化物（C）の質を見直すのが成功の鍵ですぞ。</p>
+        </div>
+
+        <div class="guide-card">
+            <h3>🛡️ 2. 停滞期が訪れた時の心得</h3>
+            <p>体重が減らなくなるのは、体が「飢餓から王を守ろうとする防衛本能（ホメオスタシス）」によるものです。焦らず大臣の言葉を信じて耐え忍ぶのです！</p>
+        </div>
+
+        <div class="guide-card">
+            <h3>⚖️ 3. 体重のゆらぎに惑わされない術</h3>
+            <p>前日の塩分や水分量により、体重は平気で1kgほど上下いたします。日々の「点」ではなく、直近7日間の「平均線」を見るのが賢王の務めです。</p>
+        </div>
+    </div>
+
+    <!-- フッター（お問い合わせ＆プライバシーポリシーの控えめなテキストリンク） -->
+    <footer style="text-align: center; margin-top: 20px; border-top: 1px dashed #d4af37; padding-top: 15px; font-size: 0.82rem;">
+        <a href="#" id="open-privacy-modal" style="color: #5a4a35; text-decoration: underline; cursor: pointer;">プライバシーポリシー・免責事項</a>
+        <span style="color: #8b6508; margin: 0 8px;">|</span>
+        <a href="#" id="open-contact-modal" style="color: #5a4a35; text-decoration: underline; cursor: pointer;">大臣執務室へお問い合わせ</a>
+    </footer>
+</div>
+
+<!-- ================= 1. お問い合わせモーダル ================= -->
+<div id="contact-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 34, 30, 0.6); z-index: 9999; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box;">
+    <div style="background: #fdf6e2; border: 4px solid #8b6508; border-radius: 10px; padding: 25px 20px; width: 100%; max-width: 420px; position: relative; box-shadow: 0 8px 25px rgba(0,0,0,0.3); box-sizing: border-box; font-family: 'M 1+1c Rounded', 'Rounded Mplus 1c', sans-serif;">
+        
+        <button id="close-contact-modal" style="position: absolute; top: 10px; right: 12px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #722f37; line-height: 1;">&times;</button>
+        
+        <h3 style="margin-top: 0; color: #722f37; font-size: 1.1rem; margin-bottom: 15px; text-align: center; border-bottom: 2px dashed #8b6508; padding-bottom: 6px;">🏛️ 大臣執務室へのご用件</h3>
+        
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="contact" />
+            <p style="display: none;"><label>Don't fill this out: <input name="bot-field" /></label></p>
+            
+            <div style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 0.82rem; margin-bottom: 4px; color: #2c221e; font-weight: bold;">お名前（王国の お名前）</label>
+                <input type="text" name="name" required style="width: 100%; padding: 8px; border: 1px solid #8b6508; border-radius: 4px; background: #fffdf5; box-sizing: border-box; font-size: 0.9rem; color: #2c221e;" />
+            </div>
+            
+            <div style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 0.82rem; margin-bottom: 4px; color: #2c221e; font-weight: bold;">メールアドレス</label>
+                <input type="email" name="email" required style="width: 100%; padding: 8px; border: 1px solid #8b6508; border-radius: 4px; background: #fffdf5; box-sizing: border-box; font-size: 0.9rem; color: #2c221e;" />
+            </div>
+            
+            <div style="margin-bottom: 18px;">
+                <label style="display: block; font-size: 0.82rem; margin-bottom: 4px; color: #2c221e; font-weight: bold;">ご意見・ご要望（メッセージ）</label>
+                <textarea name="message" rows="4" required style="width: 100%; padding: 8px; border: 1px solid #8b6508; border-radius: 4px; background: #fffdf5; box-sizing: border-box; font-size: 0.9rem; color: #2c221e; resize: vertical;"></textarea>
+            </div>
+            
+            <button type="submit" style="width: 100%; background: #8b6508; color: #fdf6e2; border: 2px solid #5a4a35; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.95rem; font-weight: bold; box-shadow: 0 3px 6px rgba(0,0,0,0.15);">書状を投函する</button>
+        </form>
+    </div>
+</div>
+
+<!-- ================= 2. プライバシーポリシー・免責事項モーダル（大臣口調版） ================= -->
+<div id="privacy-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 34, 30, 0.6); z-index: 9999; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box;">
+    <div style="background: #fdf6e2; border: 4px solid #8b6508; border-radius: 10px; padding: 25px 20px; width: 100%; max-width: 460px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 8px 25px rgba(0,0,0,0.3); box-sizing: border-box; font-family: 'M 1+1c Rounded', 'Rounded Mplus 1c', sans-serif; color: #2c221e;">
+        
+        <button id="close-privacy-modal" style="position: absolute; top: 10px; right: 12px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #722f37; line-height: 1;">&times;</button>
+        
+        <h3 style="margin-top: 0; color: #722f37; font-size: 1.1rem; margin-bottom: 15px; text-align: center; border-bottom: 2px dashed #8b6508; padding-bottom: 6px;">📜 王国の掟と免責の定めの書</h3>
+        
+        <div style="font-size: 0.82rem; line-height: 1.6;">
+            <p style="font-weight: bold; color: #722f37; margin-bottom: 4px;">■ 書状（個人情報）の扱いについて</p>
+            <p>我が王より執務室へ寄せられた書状（お問い合わせ）に記されたお名前や電子の文通先（メールアドレス）は、返答を奏上するためだけに用いるものとする。これ以外の不心得な目的で用いることは一切ございませんぞ！ </p>
+            
+            <p style="font-weight: bold; color: #722f37; margin-top: 12px; margin-bottom: 4px;">■ 広告宣伝の仕組み（アフィリエイト）について</p>
+            <p>当王国は、アフィリエイト等の広告宣伝プログラムに参加しておられますぞ。訪れし王たちの興味に合わせた品々を紹介するため、クッキー（Cookie）等を用いて広告を配置することがあるゆえ、あらかじめ心づもりくだされ。</p>
+            
+            <p style="font-weight: bold; color: #722f37; margin-top: 12px; margin-bottom: 4px;">■ 免責のお触れ（ご注意）</p>
+            <p>当アプリにて語られる健康や減量の教えは、あくまで日々の楽しみと一般的な体調管理を目的としたもの。医学的な奇跡や効果を保証するものではございませんぞ！ 万が一、この教えに従いて何らかの不都合が生じても、大臣は一切の責任を負いかねるゆえ、自己責任の心得でお励みくだされ。</p>
+            
+            <p style="font-weight: bold; color: #722f37; margin-top: 12px; margin-bottom: 4px;">■ 王国の著作権について</p>
+            <p>当王国に綴られし全ての文章、意匠、絵画の著作権は大臣に帰属するものとする。許可なき無断転載や悪用は固く禁じますぞ！</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="close-privacy-btn" style="background: #8b6508; color: #fdf6e2; border: 2px solid #5a4a35; padding: 6px 20px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">お触れを納める</button>
+        </div>
+    </div>
+</div>
+
+<!-- モーダルの開閉を制御するJavaScript -->
+<script>
+    // お問い合わせモーダル
+    const contactModal = document.getElementById('contact-modal');
+    const openContactBtn = document.getElementById('open-contact-modal');
+    const closeContactBtn = document.getElementById('close-contact-modal');
+
+    openContactBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        contactModal.style.display = 'flex';
+    });
+    closeContactBtn.addEventListener('click', () => {
+        contactModal.style.display = 'none';
+    });
+
+    // プライバシーポリシーモーダル
+    const privacyModal = document.getElementById('privacy-modal');
+    const openPrivacyBtn = document.getElementById('open-privacy-modal');
+    const closePrivacyBtn = document.getElementById('close-privacy-modal');
+    const closePrivacyBtnBottom = document.getElementById('close-privacy-btn');
+
+    openPrivacyBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        privacyModal.style.display = 'flex';
+    });
+    closePrivacyBtn.addEventListener('click', () => {
+        privacyModal.style.display = 'none';
+    });
+    closePrivacyBtnBottom.addEventListener('click', () => {
+        privacyModal.style.display = 'none';
+    });
+
+    // モーダルの外側（背景の暗い部分）をクリックしたときに閉じる共通処理
+    window.addEventListener('click', (e) => {
+        if (e.target === contactModal) {
+            contactModal.style.display = 'none';
+        }
+        if (e.target === privacyModal) {
+            privacyModal.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>

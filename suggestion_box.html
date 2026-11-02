@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>王国日誌 - 王様の100日ダイエット</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <style>
+        /* 羊皮紙風の世界観・デザイン（minister_office.htmlと統一） */
+        body {
+            background-color: #f4ebd0;
+            color: #2c221e;
+            font-family: 'M 1+1c Rounded', 'Rounded Mplus 1c', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 10px;
+            box-sizing: border-box;
+        }
+
+        /* 王国ナビゲーションバー */
+        .kingdom-nav {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 12px;
+        }
+        .nav-btn {
+            flex: 1;
+            background: #e8dfc5;
+            color: #5a4a35;
+            border: 2px solid #8b6508;
+            border-radius: 8px 8px 0 0;
+            padding: 8px 2px;
+            font-size: 0.82rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .nav-btn:hover {
+            background: #d4af37;
+            color: #fff;
+        }
+        .nav-btn.active {
+            background: #8b6508;
+            color: #fdf6e2;
+            border-bottom: 2px solid #8b6508;
+        }
+
+        /* メインコンテナ */
+        .journal-room {
+            background: #fdf6e2;
+            border: 6px solid #8b6508;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        h1 {
+            color: #722f37;
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 16px;
+            text-align: center;
+            border-bottom: 2px dashed #8b6508;
+            padding-bottom: 8px;
+        }
+
+        /* 挨拶・導入エリア */
+        .herald-greeting {
+            background: #fffdf5;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .herald-icon {
+            width: 45px;
+            height: 65px;
+            background: #f4ebd0;
+            border: 2px solid #8b6508;
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .herald-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .greeting-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: #2c221e;
+        }
+
+        /* セクション枠（公文書・羊皮紙風） */
+        .edict-section {
+            background: #fff;
+            border: 2px solid #8b6508;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 18px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        .edict-title {
+            color: #722f37;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid #e0d0b0;
+            padding-bottom: 6px;
+        }
+
+        /* ガイダンス（①・②の説明）エリア */
+        .guide-box {
+            background: #fcf8ec;
+            border: 1px dashed #d4af37;
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: #5a4a35;
+        }
+        .guide-box ul {
+            margin: 4px 0 0 16px;
+            padding: 0;
+        }
+        .guide-box li {
+            margin-bottom: 6px;
+        }
+
+        /* フォームグループ */
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #5a4a35;
+            margin-bottom: 4px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d4af37;
+            border-radius: 6px;
+            background-color: #fffdf5;
+            color: #2c221e;
+            font-family: inherit;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus {
+            border-color: #8b6508;
+            box-shadow: 0 0 5px rgba(139, 101, 8, 0.3);
+        }
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* ボタンデザイン */
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(180deg, #a83232 0%, #722f37 100%);
+            color: #fdf6e2;
+            border: 2px solid #541d23;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+        .submit-btn:hover {
+            background: linear-gradient(180deg, #b83b3b 0%, #853740 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+        }
+        .submit-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* バックアップ用ボタン群 */
+        .backup-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .sub-action-btn {
+            flex: 1;
+            background: #e8dfc5;
+            color: #5a4a35;
+            border: 1px solid #8b6508;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .sub-action-btn:hover {
+            background: #d4af37;
+            color: #fff;
+        }
+
+        /* 日誌カード一覧 */
+        .posts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .post-card {
+            background: #fffdf5;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            padding: 14px;
+            position: relative;
+            box-shadow: 1px 2px 5px rgba(0,0,0,0.05);
+        }
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #e8dfc5;
+            padding-bottom: 6px;
+        }
+        .post-author {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #1a2b4c;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .post-date {
+            font-size: 0.75rem;
+            color: #8c7b6c;
+        }
+        .post-category {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        /* カテゴリ別スタイル */
+        .cat-vow { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+        .cat-repent { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+        .cat-reward { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+
+        .post-body {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* 大臣の勅答（返信）ボックス */
+        .minister-reply {
+            background: #fcf8ec;
+            border-left: 4px solid #8b6508;
+            padding: 8px 10px;
+            margin-top: 8px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: #2c221e;
+        }
+        .minister-reply-title {
+            font-weight: bold;
+            color: #722f37;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* 通知トースト */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #722f37;
+            color: #fdf6e2;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 2px solid #d4af37;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: transform 0.3s ease-out;
+            z-index: 1000;
+            pointer-events: none;
+            text-align: center;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* クリアボタン */
+        .reset-wrapper {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .clear-btn {
+            background: transparent;
+            border: none;
+            color: #a87333;
+            font-size: 0.75rem;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 王国ナビゲーションバー -->
+<nav class="kingdom-nav">
+    <a href="index.html" class="nav-btn">👑 玉座の間</a>
+    <a href="minister_office.html" class="nav-btn">🏛️ 大臣執務室</a>
+    <a href="guard_room.html" class="nav-btn">🛡️ 守衛室</a>
+    <a href="suggestion_box.html" class="nav-btn active">📖 王国日誌</a>
+</nav>
+
+<div class="journal-room">
+    <h1>📖 王国日誌</h1>
+
+    <!-- 伝令使からの挨拶 -->
+    <div class="herald-greeting">
+        <div class="herald-icon">
+            <img src="img/minister03.png" alt="大臣">
+        </div>
+        <div class="greeting-text">
+            我が王よ、日々のダイエットの歩み、真にお見事でございます！<br>
+            ここは我が王専用の<b>「王国日誌」</b>でございます。「本日の決意」「懺悔（反省）」「大臣へのご褒美」のいずれかをおつづりいただければ、この大臣が心を込めて確認し、お返事を献上いたしますぞ！
+        </div>
+    </div>
+
+    <!-- 安心・バックアップに関する解説エリア -->
+    <div class="edict-section">
+        <div class="edict-title">📜 大臣より日誌保管のご案内</div>
+        <div class="guide-box">
+            <ul>
+                <li><b>① 安心の秘匿保存でございます：</b> 我が王が認めた日誌は、お使いの端末（ブラウザ）の中にのみ大切に秘匿保存されます。城外（外部サーバー等）へ流出することは一切ございませんので、どうぞご安心の上、自由にお書き綴りくださいませ。</li>
+                <li><b>② 大切な記録の保存と復元について：</b> ブラウザのお手入れや端末のお買い替えに備え、日誌を「巻物（ファイル）」としてお手元に書き出して保管いただけます。万が一の際も、「復元」よりその巻物を読み込ませていただければ、いつでも過去の大切な記録をお戻しいたしますぞ。</li>
+            </ul>
+        </div>
+        <div class="backup-buttons">
+            <button type="button" id="export-btn" class="sub-action-btn">💾 日誌をバックアップ (保存)</button>
+            <button type="button" id="import-trigger-btn" class="sub-action-btn">📂 日誌を復元 (読み込み)</button>
+            <input type="file" id="import-file" accept=".json" style="display: none;">
+        </div>
+    </div>
+
+    <!-- 日誌記入フォーム -->
+    <div class="edict-section">
+        <div class="edict-title">✒️ 本日の日誌を書く</div>
+        <form id="suggestion-form">
+            <div class="form-group">
+                <label for="post-category">🏷️ 記録の種別</label>
+                <select id="post-category" class="form-control">
+                    <option value="vow">🔥 本日の決意</option>
+                    <option value="repent">🙇 懺悔（反省）</option>
+                    <option value="reward">🎁 大臣へのご褒美</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="post-content">📜 日誌の本文</label>
+                <textarea id="post-content" class="form-control" placeholder="例：今日は間食を我慢してウォーキングを30分達成できた！" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">📖 王国日誌に記す</button>
+        </form>
+    </div>
+
+    <!-- 過去の日誌一覧 -->
+    <div class="edict-section" style="margin-bottom: 0;">
+        <div class="edict-title">📚 過去の王国日誌一覧</div>
+        <div id="posts-container" class="posts-list">
+            <!-- JavaScriptでここに日誌カードが動的生成されます -->
+        </div>
+
+        <div class="reset-wrapper">
+            <button id="reset-posts-btn" class="clear-btn">※初期の日誌データに戻す</button>
+        </div>
+    </div>
+</div>
+
+<!-- トースト通知 -->
+<div id="toast" class="toast">📖 日誌をしるしましたぞ！</div>
+
+<script>
+    // 初期サンプルデータ（新カテゴリ対応）
+    const DEFAULT_POSTS = [
+        {
+            id: 'default-1',
+            author: '我が王',
+            category: 'vow',
+            categoryName: '🔥 本日の決意',
+            date: '2026/10/20',
+            content: '明日からは必ず朝のジョギングを30分継続するぞ！己に克つ！',
+            reply: '我が王のその熱きご決意、しかと拝見いたしました！焦らず一歩ずつ、理想のお体を取り戻して参りましょうぞ！'
+        },
+        {
+            id: 'default-2',
+            author: '我が王',
+            category: 'repent',
+            categoryName: '🙇 懺悔（反省）',
+            date: '2026/10/18',
+            content: '城下町のパン屋の誘惑に負けてクロワッサンを3つも食べてしまった……反省。',
+            reply: '食べた分は明日以降のスクワットで相殺すれば問題ございません！一度の過ちで諦めぬことこそ、賢王への第一歩でございますぞ。'
+        },
+        {
+            id: 'default-3',
+            author: '我が王',
+            category: 'reward',
+            categoryName: '🎁 大臣へのご褒美',
+            date: '2026/10/15',
+            content: '10日間連続でダイエットをやり遂げた自分に、極上の炭酸水を下賜する！大臣も一緒に飲むか？',
+            reply: 'なんと！我が王より大臣にまでお裾分けとは、身に余る光栄でございます！その慈悲深さに心底感激いたしましたぞ！'
+        }
+    ];
+
+    // ストレージキーを個人日誌用に統一
+    const STORAGE_KEY = 'king_diet_personal_journal';
+
+    // DOM要素の取得
+    const form = document.getElementById('suggestion-form');
+    const postsContainer = document.getElementById('posts-container');
+    const toast = document.getElementById('toast');
+    const resetBtn = document.getElementById('reset-posts-btn');
+    const exportBtn = document.getElementById('export-btn');
+    const importTriggerBtn = document.getElementById('import-trigger-btn');
+    const importFile = document.getElementById('import-file');
+
+    // ローカルストレージからデータ取得
+    function getStoredPosts() {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) return DEFAULT_POSTS;
+        try {
+            return JSON.parse(data);
+        } catch (e) {
+            return DEFAULT_POSTS;
+        }
+    }
+
+    // ローカルストレージへ保存
+    function savePosts(posts) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+    }
+
+    // カテゴリ表示クラスの取得
+    function getCategoryClass(category) {
+        switch (category) {
+            case 'vow': return 'cat-vow';
+            case 'repent': return 'cat-repent';
+            case 'reward': return 'cat-reward';
+            default: return 'cat-vow';
+        }
+    }
+
+    // カテゴリ名の取得
+    function getCategoryName(category) {
+        switch (category) {
+            case 'vow': return '🔥 本日の決意';
+            case 'repent': return '🙇 懺悔（反省）';
+            case 'reward': return '🎁 大臣へのご褒美';
+            default: return '🔥 本日の決意';
+        }
+    }
+
+    // ランダムな大臣の返信を取得
+    function getRandomReply(category) {
+        const templates = REPLY_TEMPLATES[category] || REPLY_TEMPLATES.vow;
+        const index = Math.floor(Math.random() * templates.length);
+        return templates[index];
+    }
+
+   // 大臣の自動勅答（返信）テンプレート（汎用・文脈調整済み決定版）
+    const REPLY_TEMPLATES = {
+        vow: [
+            "我が王のその熱きご決意、しかと拝見いたしました！焦らず一歩ずつ、理想のお体を取り戻して参りましょうぞ！",
+            "素晴らしい気概にございます！その強いお気持ちがあれば、100日完走は間違いありませんぞ！",
+            "強いお気持ちこそ最大の武器！我が王の努力が実を結ぶ日を、大臣は心より信じておりますぞ。",
+            "おお、見事な宣戦布告にございます！己に克つそのお姿、臣下として誇らしく思いますぞ！",
+            "王のそのお言葉を聞くだけで、この大臣も胸が熱くなります！今日一日、その決意を胸に共に駆け抜けて参りましょう！",
+            "その清々しい誓い、天にも届く勢いでございますな！我が王なら必ずや成し遂げられると確信しておりますぞ！",
+            "なんという頼もしきお言葉…！我が王が示されたその道筋、この大臣も全身全霊でお支えいたしますぞ！",
+            "我が王が掲げたその誓い、我が城の歴史に刻まれるべき尊き決意にございます！微力ながら、最後までお供いたしますぞ！",
+            "見据える先がどれほど険しかろうとも、我が王のその一歩があれば必ず道は開けます！共に対局を制しましょうぞ！",
+            "決意を新たにされるお姿、実に凛々しくて素敵にございます！今日のそのお気持ちを、明日への確かな礎といたしましょう！"
+        ],
+        repent: [
+            "人間、時には魔が差すこともございます。大切なのは、そこからどう立て直すかですぞ！",
+            "ご安心くださいませ。食べた分やサボってしまった分は、明日以降の運動や節制でいくらでも取り戻せますぞ！",
+            "その素直なご反省、実に我が王らしくて立派でございます。明日からまた気持ちを新たに参りましょう！",
+            "ふふふ、正直に打ち明けてくださりありがとうございます。完璧すぎない人間味あふれる我が王も、大臣は大好きでございますぞ！",
+            "失敗を恐れる必要はございません！その反省こそが、次なる勝利の糧となるのですからな！",
+            "おっと、少しお疲れが出たのではございませんか？あまりご自分を責めすぎず、深呼吸してまた一歩を踏み出しましょうぞ！",
+            "過ちを素直に認めることこそ賢者の証。我が王のその誠実さがあれば、明日は必ずや良い一日となりますぞ！",
+            "完璧すぎる人間などおりませぬ！失敗してこそ深みが増すというもの、どうか今日はおおらかに自分を許してあげてくださいませ！",
+            "その素直なお心根こそ、真に賢い王の証にございます。転んだ先で拾った教訓を、明日からの糧にいたしましょうぞ！",
+            "おっと、少し気が緩んでしまったご様子ですね。ですが大丈夫！明日からまた仕切り直して、共にマイペースで進んで参りましょう！"
+        ],
+        reward: [
+            "なんと！我が王よりこの大臣にお心遣いを賜るとは、身に余る光栄にございます！",
+            "もったいないお言葉…！我が王のご健闘とご健康こそ、この大臣にとって何よりのご褒美にございます！",
+            "我が王の温かきご配慮、心より感謝申し上げます！いただいた温情を胸に、明日からも全力でお支えいたしますぞ！",
+            "このようなお言葉をいただけるなんて…臣下冥利に尽きますぞ！感涙にむせんでおります！",
+            "我が王の慈悲深さに心底感激いたしました！この大臣、どこまでも我が王のダイエット完走にお供いたしますぞ！",
+            "温かき恩賞を賜り、誠にありがとうございます！我が王の期待に添えるよう、さらに気を引き締めてお仕えいたします！",
+            "ありがたき幸せ！我が王の優しさに触れ、この大臣のモチベーションも最高潮に達しましたぞ！",
+            "あ、ありがたき幸せにございます……！我が王のお優しさに触れ、この大臣、嬉し涙で前が見えませんぞ！",
+            "我が王からの温かいお心遣い、心身の隅々まで染み渡ります！いただいたエネルギーを全開放して、明日からもお仕えいたします！",
+            "臣下に対するこれ以上なきお心遣い、深く感謝申し上げます！我が王のためなら、この大臣どこへでも馳せ参じますぞ！"
+        ]
+    };
+
+    // 日誌一覧のレンダリング
+    function renderPosts() {
+        const posts = getStoredPosts();
+        postsContainer.innerHTML = '';
+
+        if (posts.length === 0) {
+            postsContainer.innerHTML = '<p style="text-align:center; color:#8c7b6c; font-size:0.85rem;">まだ日誌は記されておりません。</p>';
+            return;
+        }
+
+        posts.forEach(post => {
+            const card = document.createElement('div');
+            card.className = 'post-card';
+
+            const catClass = getCategoryClass(post.category);
+            
+            card.innerHTML = `
+                <div class="post-header">
+                    <div class="post-author">👑 我が王</div>
+                    <div class="post-date">${post.date}</div>
+                </div>
+                <span class="post-category ${catClass}">${escapeHTML(post.categoryName || getCategoryName(post.category))}</span>
+                <div class="post-body">${escapeHTML(post.content)}</div>
+                ${post.reply ? `
+                    <div class="minister-reply">
+                        <div class="minister-reply-title">📜 大臣からの返答：</div>
+                        ${escapeHTML(post.reply)}
+                    </div>
+                ` : ''}
+            `;
+
+            postsContainer.appendChild(card);
+        });
+    }
+
+    // HTMLエスケープ処理（XSS防止）
+    function escapeHTML(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    // トースト表示
+    function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // フォーム送信処理
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const category = document.getElementById('post-category').value;
+        const content = document.getElementById('post-content').value.trim();
+
+        if (!content) return;
+
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
+
+        const newPost = {
+            id: 'user-' + Date.now(),
+            author: '我が王',
+            category: category,
+            categoryName: getCategoryName(category),
+            date: dateStr,
+            content: content,
+            reply: getRandomReply(category)
+        };
+
+        const currentPosts = getStoredPosts();
+        currentPosts.unshift(newPost); // 先頭に追加
+        savePosts(currentPosts);
+
+        // フォームリセット
+        form.reset();
+
+        // 再描画 & トースト
+        renderPosts();
+        showToast("📖 大臣「日誌にありがたきお言葉を賜りましたぞ！」");
+    });
+
+    // バックアップ（エクスポート）機能
+    exportBtn.addEventListener('click', () => {
+        const posts = getStoredPosts();
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(posts, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `king_diet_journal_backup_${new Date().toISOString().slice(0,10)}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        showToast("💾 日誌データを巻物として保存いたしましたぞ！");
+    });
+
+    // 復元（インポート）ボタンのトリガー
+    importTriggerBtn.addEventListener('click', () => {
+        importFile.click();
+    });
+
+    // 復元（インポート）実行ファイル読み込み
+    importFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            try {
+                const importedData = JSON.parse(event.target.result);
+                if (Array.isArray(importedData)) {
+                    savePosts(importedData);
+                    renderPosts();
+                    showToast("📂 日誌データを正常に復元いたしました！");
+                } else {
+                    alert('ファイルの形式が正しくありません。');
+                }
+            } catch (err) {
+                alert('JSONファイルの読み込みに失敗しました。');
+            }
+            importFile.value = ''; // リセット
+        };
+        reader.readAsText(file);
+    });
+
+    // 初期化ボタン処理
+    resetBtn.addEventListener('click', () => {
+        if (confirm('日誌データを初期状態に戻しますか？')) {
+            localStorage.removeItem(STORAGE_KEY);
+            renderPosts();
+            showToast("🧹 日誌を初期状態に戻しました");
+        }
+    });
+
+    // 初期実行
+    window.addEventListener('DOMContentLoaded', () => {
+        renderPosts();
+    });
+</script>
+
+</body>
+</html>

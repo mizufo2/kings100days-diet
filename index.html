@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-site-verification" content="NmlTZnDJfg5CpqxMqv84GihjJIkrkuZVB7WoHhy1pak" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>王様の100日ダイエット</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <!-- Chart.js 読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 大臣セリフデータベースの読み込み -->
+    <script src="minister_db.js"></script>
+    <style>
+        /* 羊皮紙風の世界観・デザイン */
+        body {
+            background-color: #f4ebd0;
+            color: #2c221e;
+            font-family: 'M 1+1c Rounded', 'Rounded Mplus 1c', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* アプリ全体をまとめるラッパー（位置のずれ防止） */
+        .app-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 440px;
+        }
+
+        /* 王国ナビゲーションバー */
+        .kingdom-nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        .nav-btn {
+            flex: 1;
+            background: #e8dfc5;
+            color: #5a4a35;
+            border: 2px solid #8b6508;
+            border-radius: 8px 8px 0 0;
+            padding: 8px 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+        .nav-btn:hover {
+            background: #d4af37;
+            color: #fff;
+        }
+        .nav-btn.active {
+            background: #8b6508;
+            color: #fdf6e2;
+            border-bottom: 2px solid #8b6508;
+        }
+
+        .throne-room {
+            background: #fdf6e2;
+            border: 6px solid #8b6508;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            color: #722f37;
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+        .header-status-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .day-counter {
+            background: #1a2b4c;
+            color: #fdf6e2;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .shield-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+        }
+        .throne-banner {
+            width: 100%;
+            max-height: 260px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 8px;
+            border: 2px solid #8b6508;
+            margin-bottom: 14px;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+        
+        /* メッセージ表示ボックス */
+        .message-box {
+            background: #fffdf5;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 14px;
+            text-align: left;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .message-content {
+            flex-grow: 1;
+            white-space: pre-wrap;
+        }
+        .minister-portrait {
+            width: 80px;
+            height: auto;
+            max-height: 150px;
+            object-fit: contain;
+            flex-shrink: 0;
+            border: none;
+            background: none;
+            padding: 0;
+            display: none;
+        }
+
+        .input-box {
+            background: #fff;
+            border: 2px dashed #8b6508;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+        input[type="number"], input[type="date"] {
+            font-size: 1rem;
+            padding: 4px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+        }
+        input[type="number"].weight-input {
+            font-size: 1.4rem;
+            width: 120px;
+        }
+        button.btn-tribute {
+            background: #722f37;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        button.btn-tribute:hover {
+            background: #5a232a;
+        }
+        button.btn-edit-journal {
+            background: #8b6508;
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 12px;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        button.btn-edit-journal:hover {
+            background: #6d4f06;
+        }
+        
+        /* 王国の書庫（データ管理）エリア */
+        .archive-box {
+            margin-top: 10px;
+            background: #fffdf5;
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .archive-title {
+            margin: 0 0 6px 0;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #722f37;
+        }
+        .archive-btns {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-export {
+            background: #1a2b4c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-export:hover {
+            background: #2c3e50;
+        }
+        .btn-import {
+            background: #8b6508;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+        .btn-import:hover {
+            background: #6d4f06;
+        }
+
+        button.btn-reset {
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        button.btn-reset:hover {
+            background: #5a6268;
+        }
+        .result-area {
+            display: none;
+            margin-top: 10px;
+            text-align: left;
+        }
+        
+        /* --- グラフ・ズームコントロール関連 --- */
+        .chart-filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+        .btn-chart-filter {
+            background: #e8dfc5;
+            color: #5a4a35;
+            border: 1px solid #8b6508;
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-chart-filter:hover {
+            background: #d4af37;
+            color: #fff;
+        }
+        .btn-chart-filter.active {
+            background: #8b6508;
+            color: #fff;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 220px;
+            width: 100%;
+            margin-top: 4px;
+            background: #fff;
+            border-radius: 6px;
+            padding: 8px;
+            border: 1px solid #d4af37;
+            box-sizing: border-box;
+        }
+
+        /* --- 日誌編纂（編集）モーダルダイアログ --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #fdf6e2;
+            border: 4px solid #8b6508;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 420px;
+            max-height: 85vh;
+            padding: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        .modal-header {
+            font-weight: bold;
+            color: #722f37;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .add-record-box {
+            background: #fffdf0;
+            border: 1px dashed #8b6508;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 12px;
+        }
+        .add-record-title {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #722f37;
+            margin-bottom: 6px;
+        }
+        .add-record-inputs {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn-add-record {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+        .journal-list {
+            overflow-y: auto;
+            flex-grow: 1;
+            margin-bottom: 12px;
+            max-height: 240px;
+            padding-right: 4px;
+        }
+        .journal-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #e0d0b0;
+            gap: 6px;
+        }
+        .journal-row span {
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .journal-row input[type="number"] {
+            width: 75px;
+            font-size: 0.95rem;
+        }
+        .btn-delete-row {
+            background: #c0392b;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <!-- 王国ナビゲーションバー -->
+    <nav class="kingdom-nav">
+        <a href="index.html" class="nav-btn active">👑 玉座の間</a>
+        <a href="minister_office.html" class="nav-btn">🏛️ 大臣執務室</a>
+    <a href="guard_room.html" class="nav-btn">🛡️ 守衛室</a>
+        <a href="suggestion_box.html" class="nav-btn">📖 王国日誌</a>
+        <!-- 将来の拡張用 -->
+        <!-- <a href="barracks.html" class="nav-btn">⚔️ 兵舎</a> -->
+        <!-- <a href="kitchen.html" class="nav-btn">🍳 厨房</a> -->
+    </nav>
+
+    <div class="throne-room">
+        <h1>👑 王様の100日ダイエット</h1>
+        
+        <div class="header-status-area">
+            <div id="dayCounter" class="day-counter">Day 1 / 100</div>
+            
+            <!-- ステータス盾アイコン -->
+            <div id="shieldContainer" class="shield-badge" title="王国の状態">
+                <svg id="shieldNormal" width="28" height="32" viewBox="0 0 24 28">
+                    <path d="M12 0L2 4V12C2 18.5 7 24.2 12 26C17 24.2 22 18.5 22 12V4L12 0Z" fill="#d4af37" stroke="#8b6508" stroke-width="2"/>
+                    <path d="M12 4L19 7.5V13C19 17.2 15.5 21.2 12 22.5C8.5 21.2 5 17.2 5 13V7.5L12 4Z" fill="#fdf6e2"/>
+                    <circle cx="12" cy="13" r="4" fill="#722f37"/>
+                </svg>
+                <svg id="shieldCaution" width="28" height="32" viewBox="0 0 24 28" style="display: none;">
+                    <path d="M12 0L2 4V12C2 18.5 7 24.2 12 26C17 24.2 22 18.5 22 12V4L12 0Z" fill="#c0a060" stroke="#8b6508" stroke-width="2"/>
+                    <path d="M12 4L19 7.5V13C19 17.2 15.5 21.2 12 22.5C8.5 21.2 5 17.2 5 13V7.5L12 4Z" fill="#fff9db"/>
+                    <text x="12" y="16.5" font-size="12" font-weight="bold" fill="#b8860b" text-anchor="middle">!</text>
+                </svg>
+                <svg id="shieldDefense" width="28" height="32" viewBox="0 0 24 28" style="display: none;">
+                    <path d="M12 0L2 4V12C2 18.5 7 24.2 12 26C17 24.2 22 18.5 22 12V4L12 0Z" fill="#1a2b4c" stroke="#d4af37" stroke-width="2"/>
+                    <path d="M12 4L19 7.5V13C19 17.2 15.5 21.2 12 22.5C8.5 21.2 5 17.2 5 13V7.5L12 4Z" fill="#2c3e50"/>
+                    <path d="M12 8L15 13L12 18L9 13Z" fill="#d4af37"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 玉座の間イラスト -->
+        <img id="throneBanner" src="img/royal_scale.jpg" alt="謁見の間（玉座と体重計）" class="throne-banner">
+
+        <!-- メッセージボックス -->
+        <div class="message-box">
+            <div id="messageArea" class="message-content">
+                おはようございます、我が王。本日の玉座へのご登壇をお待ちしておりましたぞ！
+            </div>
+            <img id="ministerImg" src="img/minister01.png" alt="大臣" class="minister-portrait">
+        </div>
+
+        <!-- 入力フォームエリア -->
+        <div id="inputFormSection" class="input-box">
+            <p style="margin-top:0; font-size: 0.95rem;">本日の体重を測定し、ご報告くだされ。</p>
+            <input type="number" id="weightInput" class="weight-input" step="0.1" placeholder="65.2" inputmode="decimal"> kg<br>
+            <button class="btn-tribute" onclick="submitWeight()">奉納する</button>
+        </div>
+
+        <!-- 結果・グラフ表示エリア -->
+        <div id="resultSection" class="result-area">
+            <!-- 期間切り替えタブ -->
+            <div class="chart-filter-tabs">
+                <button class="btn-chart-filter" onclick="changeChartFilter('7', this)">直近7日</button>
+                <button class="btn-chart-filter active" onclick="changeChartFilter('14', this)">直近14日</button>
+                <button class="btn-chart-filter" onclick="changeChartFilter('30', this)">直近30日</button>
+                <button class="btn-chart-filter" onclick="changeChartFilter('all', this)">全期間</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="weightChart"></canvas>
+            </div>
+            <button class="btn-tribute" style="width: 100%; margin-top: 14px;" onclick="resetToInput()">本日の公務を終える</button>
+        </div>
+
+        <!-- 王国日誌ボタン -->
+        <div>
+            <button class="btn-edit-journal" onclick="openJournalModal()">📜 王国日誌を紐解く</button>
+        </div>
+
+        <!-- 📜 王国の書庫（バックアップ管理機能） -->
+        <div class="archive-box">
+            <p class="archive-title">📜 王国の書庫（データ管理）</p>
+            <div class="archive-btns">
+                <button class="btn-export" onclick="exportBackupJson()">📤 記録を書き出す</button>
+                <label class="btn-import">
+                    📥 記録を読み込む<input type="file" id="importFile" accept=".json" onchange="importBackupJson(event)" style="display: none;">
+                </label>
+            </div>
+        </div>
+
+        <div>
+            <button class="btn-reset" onclick="resetAllData()">🔄 王国記録を初期化してやり直す</button>
+            </div>
+            <!-- ▼ シンプルに常時表示させる場合のデザインコード ▼ -->
+<div style="text-align: center; margin-top: 25px; margin-bottom: 20px; padding: 15px; border: 2px dashed #d4af37; border-radius: 12px; background: #fffdf5;">
+  <p style="font-size: 14px; font-weight: bold; color: #8b4513; margin-bottom: 12px;">🎁 王国の御用商人の品が届きましたぞ！</p>
+  
+  <script type="text/javascript">rakuten_design="slide";rakuten_affiliateId="045fb072.60381bde.58e422d5.4677e99c";rakuten_items="ctsmatch";rakuten_genreId="0";rakuten_size="250x250";rakuten_target="_blank";rakuten_theme="gray";rakuten_border="off";rakuten_auto_mode="off";rakuten_genre_title="off";rakuten_recommend="on";rakuten_ts="1793221031860";</script>
+  <script type="text/javascript" src="https://xml.affiliate.rakuten.co.jp/widget/js/rakuten_widget.js?20230106"></script>
+</div>
+    </div>
+</div>
+
+<!-- 日誌編纂モーダル -->
+<div id="journalModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>📜 王国日誌の紐解き・編集</span>
+            <button onclick="closeJournalModal()" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">✖</button>
+        </div>
+
+        <div class="add-record-box">
+            <div class="add-record-title">➕ 過去の記録を追記・挿入する</div>
+            <div class="add-record-inputs">
+                <input type="date" id="newRecordDate">
+                <input type="number" id="newRecordWeight" step="0.1" placeholder="65.0" style="width: 80px;"> kg
+            </div>
+            <button class="btn-add-record" onclick="addJournalRecord()">追記して挿入</button>
+        </div>
+
+        <div id="journalList" class="journal-list"></div>
+
+        <div style="text-align: right; margin-top: 8px;">
+            <button class="btn-tribute" style="padding: 6px 16px; font-size: 0.9rem;" onclick="saveJournalEdits()">編集内容を適用する</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY = "kings_100days_diet_data";
+    let currentChartFilter = '14'; // デフォルトは直近14日間表示
+
+    function loadAppData() {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) {
+            return { startWeight: null, targetWeight: null, history: [] };
+        }
+        return JSON.parse(data);
+    }
+
+    function saveAppData(data) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function calc7DayAvg(history, endIndex) {
+        const startIdx = Math.max(0, endIndex - 6);
+        const slice = history.slice(startIdx, endIndex + 1);
+        const sum = slice.reduce((acc, cur) => acc + cur.weight, 0);
+        return sum / slice.length;
+    }
+
+    function recalculateAllStagnation(history) {
+        history.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        history.forEach((h, idx) => {
+            h.day = idx + 1;
+        });
+
+        let prevN = 0;
+        for (let i = 0; i < history.length; i++) {
+            const Wavg = calc7DayAvg(history, i);
+            const prevIdx = Math.max(0, i - 7);
+            const Wprev = calc7DayAvg(history, prevIdx);
+
+            const deltaW = Wavg - Wprev;
+            const tolerance = Wprev * 0.003;
+
+            let isWithinTolerance = Math.abs(deltaW) <= tolerance;
+            let newN = prevN;
+
+            if (isWithinTolerance) {
+                newN = prevN + 1;
+            } else if (deltaW < -tolerance) {
+                newN = 0;
+            }
+
+            let status = "非停滞期";
+            if (isWithinTolerance && newN >= 14) {
+                status = "停滞期確定";
+            } else if (isWithinTolerance && newN >= 5 && newN <= 13) {
+                status = "停滞期の予兆";
+            }
+
+            history[i].nCount = newN;
+            history[i].status = status;
+            prevN = newN;
+        }
+    }
+
+    function evaluateStagnation(history) {
+        if (history.length === 0) {
+            return { status: "非停滞期", periodCode: "normal", nCount: 0 };
+        }
+        recalculateAllStagnation(history);
+        const last = history[history.length - 1];
+        let periodCode = "normal";
+        if (last.status === "停滞期確定") periodCode = "confirmed";
+        else if (last.status === "停滞期の予兆") periodCode = "omen";
+
+        return { status: last.status, periodCode, nCount: last.nCount };
+    }
+
+    function getChapterCode(day) {
+        if (day === 1) return "1";
+        if (day <= 20) return "2";
+        if (day <= 70) return "3";
+        if (day <= 99) return "4";
+        return "5";
+    }
+
+    function getDayDiffCode(history, startWeight) {
+        if (history.length < 2) return "flat";
+
+        const currentW = history[history.length - 1].weight;
+        const prevW = history[history.length - 2].weight;
+        const diff = currentW - prevW;
+        
+        const baseWeight = startWeight || prevW;
+        const diffPercent = (diff / baseWeight) * 100;
+
+        if (diffPercent <= -0.6) return "large_decrease";
+        if (diffPercent <= -0.2) return "small_decrease";
+        if (diffPercent < 0.2) return "flat";
+        if (diffPercent < 0.6) return "small_increase";
+        return "large_increase";
+    }
+
+    function getConclusionCode(chapterCode, isGoalReached) {
+        if (chapterCode === "1") return "1";
+        if (chapterCode === "2") return "2";
+        if (chapterCode === "3") return "3";
+        if (chapterCode === "4") return "4";
+        return isGoalReached ? "5A" : "5B";
+    }
+
+    function generateInitialChapterSpeech(day) {
+        if (typeof MINISTER_DB === 'undefined' || !MINISTER_DB.chapters) {
+            return "おはようございます、我が王。本日の玉座へのご登壇をお待ちしておりましたぞ！";
+        }
+
+        const chapterCode = getChapterCode(day);
+        const matches = MINISTER_DB.chapters.filter(item => String(item.chapter) === String(chapterCode));
+        if (!matches || matches.length === 0) {
+            return "おはようございます、我が王。本日の玉座へのご登壇をお待ちしておりましたぞ！";
+        }
+
+        const idx = Math.floor(Math.random() * matches.length);
+        let text = matches[idx].text;
+
+        text = text.replace(/\{day\}/g, day)
+                   .replace(/\{days\}/g, day)
+                   .replace(/\{入力日数\}/g, day);
+
+        return text;
+    }
+
+    function generateMinisterSpeech(history, startWeight, targetWeight, evalResult) {
+        if (typeof MINISTER_DB === 'undefined') {
+            return `📜 奏上：本日の体重【${history[history.length - 1].weight}kg】、しかと受け止めましたぞ！`;
+        }
+
+        const currentRecord = history[history.length - 1];
+        const day = currentRecord.day;
+        const chapterCode = getChapterCode(day);
+        const dayDiffCode = getDayDiffCode(history, startWeight);
+        const isGoalReached = currentRecord.weight <= targetWeight;
+        const conclusionCode = getConclusionCode(chapterCode, isGoalReached);
+
+        function getRandomText(list, filterKey, filterVal) {
+            const matches = list.filter(item => String(item[filterKey]) === String(filterVal));
+            if (!matches || matches.length === 0) return "";
+            const idx = Math.floor(Math.random() * matches.length);
+            return matches[idx].text;
+        }
+
+        let textDayDiff = getRandomText(MINISTER_DB.dayDiffs, "day_diff", dayDiffCode);
+        let textPeriod = "";
+        if (evalResult.periodCode === "omen" || evalResult.periodCode === "confirmed") {
+            textPeriod = getRandomText(MINISTER_DB.periods, "period", evalResult.periodCode);
+        }
+        let textConclusion = getRandomText(MINISTER_DB.conclusions, "conclusion", conclusionCode);
+
+        let fullText = [textDayDiff, textPeriod, textConclusion]
+            .filter(t => t && t.trim() !== "")
+            .join("\n\n");
+
+        fullText = fullText.replace(/\{day\}/g, day)
+                           .replace(/\{days\}/g, day)
+                           .replace(/\{入力日数\}/g, day);
+
+        return fullText;
+    }
+
+    function renderShieldUI(status) {
+        const shieldNormal = document.getElementById("shieldNormal");
+        const shieldCaution = document.getElementById("shieldCaution");
+        const shieldDefense = document.getElementById("shieldDefense");
+
+        shieldNormal.style.display = "none";
+        shieldCaution.style.display = "none";
+        shieldDefense.style.display = "none";
+
+        if (status === "停滞期確定") {
+            shieldDefense.style.display = "block";
+        } else if (status === "停滞期の予兆") {
+            shieldCaution.style.display = "block";
+        } else {
+            shieldNormal.style.display = "block";
+        }
+    }
+
+    window.onload = function() {
+        const appData = loadAppData();
+        const currentDay = appData.history.length + 1;
+        document.getElementById("dayCounter").innerText = `Day ${currentDay} / 100`;
+        
+        const initMsg = generateInitialChapterSpeech(currentDay);
+        document.getElementById("messageArea").innerText = initMsg;
+
+        const evalResult = evaluateStagnation(appData.history);
+        renderShieldUI(evalResult.status);
+    };
+
+    function submitWeight() {
+        const inputVal = parseFloat(document.getElementById("weightInput").value);
+        if (isNaN(inputVal) || inputVal <= 0) {
+            alert("有効な体重を入力してください、王よ。");
+            return;
+        }
+
+        let appData = loadAppData();
+        
+        if (appData.history.length === 0) {
+            appData.startWeight = inputVal;
+            appData.targetWeight = Number((inputVal * 0.95).toFixed(1));
+        }
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        const newDayNumber = appData.history.length + 1;
+        
+        const tempRecord = {
+            day: newDayNumber,
+            date: todayStr,
+            weight: inputVal,
+            nCount: 0,
+            status: "非停滞期"
+        };
+        appData.history.push(tempRecord);
+
+        const evalResult = evaluateStagnation(appData.history);
+        saveAppData(appData);
+
+        document.getElementById("throneBanner").style.display = "none";
+        document.getElementById("ministerImg").style.display = "block";
+        
+        document.getElementById("inputFormSection").style.display = "none";
+        document.getElementById("resultSection").style.display = "block";
+        document.getElementById("dayCounter").innerText = `Day ${newDayNumber} / 100`;
+        renderShieldUI(evalResult.status);
+
+        const speechMsg = generateMinisterSpeech(appData.history, appData.startWeight, appData.targetWeight, evalResult);
+        document.getElementById("messageArea").innerText = speechMsg;
+
+        renderChart(appData);
+    }
+
+    function resetToInput() {
+        document.getElementById("weightInput").value = "";
+        
+        document.getElementById("throneBanner").style.display = "block";
+        document.getElementById("ministerImg").style.display = "none";
+
+        document.getElementById("resultSection").style.display = "none";
+        document.getElementById("inputFormSection").style.display = "block";
+        
+        const appData = loadAppData();
+        const nextDay = appData.history.length + 1;
+        document.getElementById("dayCounter").innerText = `Day ${nextDay} / 100`;
+        
+        const initMsg = generateInitialChapterSpeech(nextDay);
+        document.getElementById("messageArea").innerText = initMsg;
+        
+        const evalResult = evaluateStagnation(appData.history);
+        renderShieldUI(evalResult.status);
+    }
+
+    /* --- 王国の書庫（バックアップ・インポート機能） --- */
+    function exportBackupJson() {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) {
+            alert("我が王、まだ書き出すべき王国記録がございませんぞ！");
+            return;
+        }
+
+        const blob = new Blob([data], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        
+        const todayStr = new Date().toISOString().split('T')[0];
+        a.href = url;
+        a.download = `kings_100days_diet_backup_${todayStr}.json`;
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        alert("📜 王国記の写し（バックアップ）の書き出しに成功いたしましたぞ！");
+    }
+
+    function importBackupJson(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const jsonContent = e.target.result;
+                const parsedData = JSON.parse(jsonContent);
+
+                if (!parsedData.history || !Array.isArray(parsedData.history)) {
+                    throw new Error("無効な王国データ構造です。");
+                }
+
+                if (confirm("⚠️ 既存の王国記録の上に、選択したファイルのデータを上書き（復元）します。本当によろしいですか？")) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedData));
+                    alert("📥 王国データの復元が完了いたしました！最新の状態に切り替えます。");
+                    window.location.reload();
+                }
+            } catch (err) {
+                alert("❌ データの読み込みに失敗しました。正しいバックアップファイル（JSON）を選択してください。");
+                console.error(err);
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = "";
+    }
+
+    /* --- 二重確認付き完全リセット --- */
+    function resetAllData() {
+        if (confirm("⚠️【警告】これまでの王国記録をすべて消去し、初日（Day 1）からやり直しますか？\n（※大切な記録は事前に「記録を書き出す」で保存推奨です！）")) {
+            if (confirm("本当に後悔ありませんね？ この操作は取り消せません。")) {
+                localStorage.removeItem(STORAGE_KEY);
+                alert("王国記録が完全にリセットされました。新たな気持ちで初日の測定を行ってくださいませ！");
+                window.location.reload();
+            }
+        }
+    }
+
+    /* --- 日誌モーダル関連処理 --- */
+    function openJournalModal() {
+        document.getElementById("newRecordDate").value = new Date().toISOString().split('T')[0];
+        document.getElementById("newRecordWeight").value = "";
+        
+        renderJournalList();
+        document.getElementById("journalModal").style.display = "flex";
+    }
+
+    function closeJournalModal() {
+        document.getElementById("journalModal").style.display = "none";
+    }
+
+    function renderJournalList() {
+        const appData = loadAppData();
+        const journalList = document.getElementById("journalList");
+        journalList.innerHTML = "";
+
+        if (appData.history.length === 0) {
+            journalList.innerHTML = "<p style='font-size:0.85rem;'>まだ記された王国記録がございません。</p>";
+        } else {
+            appData.history.forEach((record, index) => {
+                const row = document.createElement("div");
+                row.className = "journal-row";
+                row.innerHTML = `
+                    <span>Day ${record.day} (${record.date || '日付不明'})</span>
+                    <div>
+                        <input type="number" step="0.1" id="journal_weight_${index}" value="${record.weight}"> kg
+                        <button class="btn-delete-row" onclick="deleteJournalRecord(${index})">削除</button>
+                    </div>
+                `;
+                journalList.appendChild(row);
+            });
+        }
+    }
+
+    function addJournalRecord() {
+        const dateVal = document.getElementById("newRecordDate").value;
+        const weightVal = parseFloat(document.getElementById("newRecordWeight").value);
+
+        if (!dateVal) {
+            alert("日付を選択してください。");
+            return;
+        }
+        if (isNaN(weightVal) || weightVal <= 0) {
+            alert("有効な体重を入力してください。");
+            return;
+        }
+
+        let appData = loadAppData();
+        
+        const existingIdx = appData.history.findIndex(h => h.date === dateVal);
+        if (existingIdx >= 0) {
+            appData.history[existingIdx].weight = weightVal;
+        } else {
+            appData.history.push({
+                day: 0,
+                date: dateVal,
+                weight: weightVal,
+                nCount: 0,
+                status: "非停滞期"
+            });
+        }
+
+        recalculateAllStagnation(appData.history);
+        
+        if (appData.history.length > 0) {
+            appData.startWeight = appData.history[0].weight;
+            appData.targetWeight = Number((appData.startWeight * 0.95).toFixed(1));
+        }
+
+        saveAppData(appData);
+        alert(`📜 ${dateVal} の記録を追記いたしました！`);
+        
+        renderJournalList();
+    }
+
+    function deleteJournalRecord(index) {
+        if (confirm(`Day ${index + 1} の記録を削除しますか？`)) {
+            let appData = loadAppData();
+            appData.history.splice(index, 1);
+            
+            recalculateAllStagnation(appData.history);
+
+            if (appData.history.length > 0) {
+                appData.startWeight = appData.history[0].weight;
+                appData.targetWeight = Number((appData.startWeight * 0.95).toFixed(1));
+            } else {
+                appData.startWeight = null;
+                appData.targetWeight = null;
+            }
+
+            saveAppData(appData);
+            renderJournalList();
+        }
+    }
+
+    function saveJournalEdits() {
+        let appData = loadAppData();
+        let updated = false;
+
+        appData.history.forEach((record, index) => {
+            const inputElem = document.getElementById(`journal_weight_${index}`);
+            if (inputElem) {
+                const newVal = parseFloat(inputElem.value);
+                if (!isNaN(newVal) && newVal > 0) {
+                    record.weight = newVal;
+                    updated = true;
+                }
+            }
+        });
+
+        if (updated) {
+            recalculateAllStagnation(appData.history);
+            if (appData.history.length > 0) {
+                appData.startWeight = appData.history[0].weight;
+                appData.targetWeight = Number((appData.startWeight * 0.95).toFixed(1));
+            }
+            saveAppData(appData);
+            alert("📜 王国日誌の変更内容を反映いたしました！");
+        }
+
+        closeJournalModal();
+        window.location.reload();
+    }
+
+    /* --- グラフ・ズーム関連処理 --- */
+    function changeChartFilter(filterType, btnElement) {
+        currentChartFilter = filterType;
+        
+        // ボタンのアクティブ状態を切り替え
+        const tabs = document.querySelectorAll('.btn-chart-filter');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        // グラフ再描画
+        const appData = loadAppData();
+        renderChart(appData);
+    }
+
+    let myChart = null;
+    function renderChart(appData) {
+        const ctx = document.getElementById('weightChart').getContext('2d');
+        const fullHistory = appData.history;
+
+        // 期間フィルターの適用
+        let displayHistory = fullHistory;
+        if (currentChartFilter !== 'all') {
+            const limitDays = parseInt(currentChartFilter, 10);
+            if (fullHistory.length > limitDays) {
+                displayHistory = fullHistory.slice(fullHistory.length - limitDays);
+            }
+        }
+
+        const labels = displayHistory.map(h => `Day ${h.day}`);
+        const weights = displayHistory.map(h => h.weight);
+
+        // 7日平均（全期間の履歴データをベースに計算、表示対象スライスを抽出）
+        const movingAvgData = displayHistory.map((h) => {
+            const fullIndex = fullHistory.findIndex(item => item.day === h.day);
+            return Number(calc7DayAvg(fullHistory, fullIndex).toFixed(1));
+        });
+
+        const startW = appData.startWeight;
+        const targetW = appData.targetWeight;
+        const totalDays = 100;
+        const dailyDecrease = (startW - targetW) / (totalDays - 1);
+        const idealLineData = displayHistory.map(h => {
+            let idealW = startW - dailyDecrease * (h.day - 1);
+            return Number(idealW.toFixed(1));
+        });
+
+        if (myChart) myChart.destroy();
+
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: '実績体重',
+                        data: weights,
+                        borderColor: '#722f37',
+                        backgroundColor: 'rgba(114, 47, 55, 0.05)',
+                        borderWidth: 2,
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: '直近7回平均',
+                        data: movingAvgData,
+                        borderColor: '#1a2b4c',
+                        borderWidth: 2.5,
+                        tension: 0.3,
+                        fill: false
+                    },
+                    {
+                        label: '理想ロード',
+                        data: idealLineData,
+                        borderColor: '#d4af37',
+                        borderWidth: 2,
+                        borderDash: [4, 4],
+                        pointRadius: 0,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { 
+                    y: { 
+                        beginAtZero: false 
+                    } 
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

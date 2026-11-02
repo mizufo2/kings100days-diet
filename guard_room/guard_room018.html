@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【親衛隊長が王に語る】ビールを飲みながら腹を凹ませる極秘極楽作戦</title>
+    <style>
+        /* 羊皮紙風モーダル内コンテンツ・スタイル（guard_room001.htmlの世界観に準拠） */
+        .modal-column-container {
+            background-color: #fdf6e2;
+            color: #2c221e;
+            font-family: 'M 1+1c Rounded', 'Rounded Mplus 1c', sans-serif;
+            border: 4px solid #8b6508;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            max-width: 600px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* コラムヘッダー */
+        .modal-column-container h1 {
+            color: #722f37;
+            font-size: 1.3rem;
+            line-height: 1.4;
+            margin-top: 0;
+            margin-bottom: 14px;
+            text-align: center;
+            border-bottom: 2px dashed #8b6508;
+            padding-bottom: 10px;
+        }
+
+        /* 親衛隊長の情熱メッセージエリア */
+        .guard-captain-header {
+            background: #fffdf5;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .guard-portrait {
+            width: 80px;
+            height: auto;
+            flex-shrink: 0;
+            border-radius: 6px;
+            border: 1px solid #8b6508;
+            background-color: #e8dfc5;
+        }
+
+        .guard-lead-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: #2c221e;
+            font-weight: bold;
+        }
+
+        /* 章セクション（公文書・公務風） */
+        .column-section {
+            background: #fff;
+            border: 2px solid #8b6508;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .column-section h2 {
+            color: #722f37;
+            font-size: 1.05rem;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0d0b0;
+            padding-bottom: 6px;
+        }
+
+        .column-section p {
+            font-size: 0.88rem;
+            line-height: 1.65;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        /* 各作戦カード */
+        .strategy-card {
+            background: #fcf8ec;
+            border: 1px dashed #d4af37;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .strategy-card h3 {
+            margin: 0 0 6px 0;
+            font-size: 0.95rem;
+            color: #722f37;
+            display: flex;
+            align-items: center;
+        }
+
+        /* ハイライト装飾 */
+        .highlight-badge {
+            background: #8b6508;
+            color: #fff;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 6px;
+            display: inline-block;
+        }
+
+        /* 作戦陣形表（テーブル） */
+        .strategy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.82rem;
+        }
+
+        .strategy-table th, .strategy-table td {
+            border: 1px solid #d4af37;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .strategy-table th {
+            background-color: #8b6508;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .strategy-table tr:nth-child(even) {
+            background-color: #fcf8ec;
+        }
+
+        /* まとめ・熱血檄文エリア */
+        .passion-footer {
+            background: #eef7ed;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+            color: #1e6b37;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="modal-column-container">
+    <!-- タイトル -->
+    <h1>我が王に捧ぐ！「ビールを飲みながら腹を凹ませる極秘極楽作戦」<br><small style="font-size: 0.8rem; color: #8b6508;">〜守衛室より愛を込めた肉体改造・指南書〜</small></h1>
+
+    <!-- 親衛隊長 ランダム画像 ＆ 冒頭檄文 -->
+    <div class="guard-captain-header">
+        <img id="guardCaptainImg" src="" alt="熱血スパルタ親衛隊長" class="guard-portrait">
+        <div class="guard-lead-text">
+            我が偉大なる王よ！守衛室の親衛隊長、ここにご報告と秘策をご提示いたします！<br>
+            最近、王の鎧が少々きつくなってきたこと、この親衛隊長の目はごまかせませんぞ！<br>
+            しかしご安心を。ビールを我慢するなどという酷な拷問を、我が王に強いるつもりは毛頭ございません！
+        </div>
+    </div>
+
+    <!-- 第一章 -->
+    <div class="column-section">
+        <h2>🍺 第一章：なぜビールで腹が出るのか？真犯人は「おつまみ」にあり！</h2>
+        <p>王よ、ビールそのものが悪なのではございません。</p>
+        <p>実はビールに誘われて口に運ぶ<b>「山盛りの唐揚げ」</b>や<b>「濃い味のおつまみ」</b>こそが、王国（王の体幹）を脅かす真の刺客（カロリー）なのです！</p>
+    </div>
+
+    <!-- 第二章 -->
+    <div class="column-section">
+        <h2>⚔️ 第二章：親衛隊長直伝！勝利のための三原則</h2>
+        
+        <div class="strategy-card">
+            <h3><span class="highlight-badge">原則一</span>糖質オフの黄金泡を選べ！</h3>
+            <p style="margin-bottom: 0;">戦場（居酒屋・晩酌）では、糖質ゼロや糖質オフのビールを優先的に召し上がるのです。これだけで摂取カロリーの戦力を大幅に削ぐことができます！</p>
+        </div>
+
+        <div class="strategy-card">
+            <h3><span class="highlight-badge">原則二</span>序盤のおつまみ防衛線を築け！</h3>
+            <p style="margin-bottom: 0;">乾杯と同時に枝豆、冷や奴、海藻サラダなどを胃袋という城門の前に配置してください。脂肪の吸収を抑え、満腹感を演出する完璧な防空壕となります！</p>
+        </div>
+
+        <div class="strategy-card">
+            <h3><span class="highlight-badge">原則三</span>水という名の補給兵を並行させよ！</h3>
+            <p style="margin-bottom: 0;">ビール1杯につき、水（チェイサー）を1杯。これでアルコールの分解を助け、翌朝のむくみという名の敵の急襲を防ぎます！</p>
+        </div>
+
+        <!-- 陣形表 -->
+        <table class="strategy-table">
+            <thead>
+                <tr>
+                    <th>作戦項目</th>
+                    <th>実践陣形（推奨行動）</th>
+                    <th>撃退すべき脅威</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>黄金泡の選定</b></td>
+                    <td>糖質ゼロ・オフ銘柄を配備</td>
+                    <td>過剰な糖質・余剰カロリー</td>
+                </tr>
+                <tr>
+                    <td><b>城門防衛</b></td>
+                    <td>枝豆・冷奴・海藻サラダを先遣隊に</td>
+                    <td>急激な血糖値上昇と脂肪吸収</td>
+                </tr>
+                <tr>
+                    <td><b>補給線の維持</b></td>
+                    <td>ビールと同量のチェイサー（水）</td>
+                    <td>翌朝のむくみ・アルコール残存</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 結びのメッセージ -->
+    <div class="passion-footer">
+        🍺 王よ、無理な禁酒は反乱の元（リバウンドの危険）でございます！ 🍺<br>
+        ビールを愛したまま、賢く嗜むことで、引き締まった男らしさを取り戻しましょうぞ。<br>
+        明日からの親衛隊の巡回、王の凛々しいお姿を楽しみにしております！
+    </div>
+</div>
+
+<script>
+    // 親衛隊長画像（royal_guards02.png 〜 royal_guards08.png）をランダムで差し込む処理
+    (function setRandomGuardImage() {
+        // 2から8までのランダムな整数を生成
+        const min = 2;
+        const max = 8;
+        const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+        
+        // 2桁のゼロパディング形式（02, 03, ..., 08）に変換
+        const imageNumber = String(randomNum).padStart(2, '0');
+        
+        // 画像エレメントを取得し、srcを設定
+        const guardImgElement = document.getElementById('guardCaptainImg');
+        if (guardImgElement) {
+            guardImgElement.src = `img/royal_guards${imageNumber}.png`;
+        }
+    })();
+</script>
+
+</body>
+</html>
